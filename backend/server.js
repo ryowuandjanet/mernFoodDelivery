@@ -11,7 +11,13 @@ const app = express();
 const port = 4000;
 
 app.use(express.json());
-app.use(cors());
+
+// 將cors()函數改為包含特定origin的設置
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+  })
+);
 
 connectDB();
 
