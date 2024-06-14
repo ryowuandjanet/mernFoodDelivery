@@ -12,28 +12,29 @@ const port = 4000;
 
 app.use(express.json());
 
-// 將cors()函數改為包含特定origin的設置
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL,
-  })
-);
+// 允許特定來源訪問
+app.use(cors());
 
-// 處理 CORS
+connectDB();
+
+// 處理 CORS，動態設置 'Access-Control-Allow-Origin' 標頭
 app.use((req, res, next) => {
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://mern-food-delivery-admin-beige.vercel.app"
-  );
+  const allowedOrigins = [
+    "https://mern-food-delivery-admin-beige.vercel.app",
+    "https://mern-food-delivery-gamma.vercel.app",
+  ];
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
   res.setHeader(
     "Access-Control-Allow-Methods",
     "GET, POST, PUT, DELETE, OPTIONS"
   );
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", true); // 如果需要使用身份驗證，設置為 true
   next();
 });
-
-connectDB();
 
 app.use("/api/food", foodRouter);
 app.use("/images", express.static("uploads"));
