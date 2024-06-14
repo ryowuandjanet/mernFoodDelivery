@@ -19,10 +19,7 @@ connectDB();
 
 // 處理 CORS，動態設置 'Access-Control-Allow-Origin' 標頭
 app.use((req, res, next) => {
-  const allowedOrigins = [
-    "https://mern-food-delivery-admin-beige.vercel.app",
-    "https://mern-food-delivery-gamma.vercel.app",
-  ];
+  const allowedOrigins = [process.env.ADMIN_URL, process.env.CLIENT_URL];
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
